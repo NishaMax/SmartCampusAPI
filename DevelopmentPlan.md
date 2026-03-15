@@ -6,9 +6,9 @@ This plan breaks down the coursework into manageable daily tasks to ensure consi
 
 ### Day 1: Project Initialization
 
-- [ ] Create a Maven project (`pom.xml`).
-- [ ] Add dependencies: Jersey (JAX-RS), Servlet Container (Jetty/Tomcat), Jackson (JSON).
-- [ ] Create strict package structure (e.g., `com.westminster.smartcampus`).
+- [x] Create a Maven project (`pom.xml`).
+- [x] Add dependencies: Jersey (JAX-RS), Servlet Container (Jetty/Tomcat), Jackson (JSON).
+- [x] Create strict package structure (e.g., `com.westminster.smartcampus`).
 - [ ] **Commit Message:** "Initial project structure and dependencies"
 
 ### Day 2: Application Config & Core Models
