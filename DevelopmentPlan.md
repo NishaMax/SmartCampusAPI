@@ -13,9 +13,9 @@ This plan breaks down the coursework into manageable daily tasks to ensure consi
 
 ### Day 2: Application Config & Core Models
 
-- [ ] Create `SmartCampusApp` extending `javax.ws.rs.core.Application`.
-- [ ] Set `@ApplicationPath("/api/v1")`.
-- [ ] Create POJO classes: `Room`, `Sensor`, `SensorReading` (fields/getters/setters).
+- [x] Create `SmartCampusApp` extending `javax.ws.rs.core.Application`.
+- [x] Set `@ApplicationPath("/api/v1")`.
+- [x] Create POJO classes: `Room`, `Sensor`, `SensorReading` (fields/getters/setters).
 - [ ] **Commit Message:** "Added application config and core data models"
 
 ### Day 3: In-Memory Database Service
