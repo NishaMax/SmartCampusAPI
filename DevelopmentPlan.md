@@ -36,9 +36,9 @@ This plan breaks down the coursework into manageable daily tasks to ensure consi
 
 ### Day 5: Room Resource - Basic CRUD
 
-- [ ] Create `RoomResource`.
-- [ ] Implement `GET /rooms` (list all).
-- [ ] Implement `POST /rooms` (create new).
+- [x] Create `RoomResource`.
+- [x] Implement `GET /rooms` (list all).
+- [x] Implement `POST /rooms` (create new).
 - [ ] **Commit Message:** "Implemented Room listing and creation"
 
 ### Day 6: Room Resource - Details & Storage Logic
