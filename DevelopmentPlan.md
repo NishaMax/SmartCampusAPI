@@ -27,9 +27,9 @@ This plan breaks down the coursework into manageable daily tasks to ensure consi
 
 ### Day 4: Part 1 - Discovery Endpoint & Report
 
-- [ ] Implement `DiscoveryResource` at `GET /api/v1`.
-- [ ] Return JSON with API metadata and links.
-- [ ] **Report:** Answer Q1 (Lifecycle) and Q2 (Hypermedia) in `ReadMe.md`.
+- [x] Implement `DiscoveryResource` at `GET /api/v1`.
+- [x] Return JSON with API metadata and links.
+- [x] **Report:** Answer Q1 (Lifecycle) and Q2 (Hypermedia) in `ReadMe.md`.
 - [ ] **Commit Message:** "Added discovery endpoint and answered Part 1 questions"
 
 ## Phase 2: Room Management (Days 5-8)
