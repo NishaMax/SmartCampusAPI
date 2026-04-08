@@ -20,9 +20,9 @@ This plan breaks down the coursework into manageable daily tasks to ensure consi
 
 ### Day 3: In-Memory Database Service
 
-- [ ] Create a `DataStore` singleton class (since no SQL allowed).
-- [ ] Add `ConcurrentHashMap` for Rooms and Sensors.
-- [ ] Implement thread-safe methods to add/get items.
+- [x] Create a `DataStore` singleton class (since no SQL allowed).
+- [x] Add `ConcurrentHashMap` for Rooms and Sensors.
+- [x] Implement thread-safe methods to add/get items.
 - [ ] **Commit Message:** "Implemented in-memory data store singleton"
 
 ### Day 4: Part 1 - Discovery Endpoint & Report
