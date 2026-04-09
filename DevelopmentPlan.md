@@ -63,9 +63,9 @@ This plan breaks down the coursework into manageable daily tasks to ensure consi
 
 ### Day 9: Sensor Resource - Basic Creation
 
-- [ ] Create `SensorResource`.
-- [ ] Implement `POST /sensors`.
-- [ ] Add validation: Check if `roomId` exists in `DataStore`.
+- [x] Create `SensorResource`.
+- [x] Implement `POST /sensors`.
+- [x] Add validation: Check if `roomId` exists in `DataStore`.
 - [ ] **Commit Message:** "Implemented sensor creation with room validation"
 
 ### Day 10: Sensor Resource - Listing & Filtering
