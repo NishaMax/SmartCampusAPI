@@ -55,8 +55,8 @@ This plan breaks down the coursework into manageable daily tasks to ensure consi
 
 ### Day 8: Part 2 Verification & Report
 
-- [ ] Test Room endpoints with Curl/Postman.
-- [ ] **Report:** Answer Q3 (List vs Full Objects) and Q4 (Idempotency) in `ReadMe.md`.
+- [x] Test Room endpoints with Curl/Postman.
+- [x] **Report:** Answer Q3 (List vs Full Objects) and Q4 (Idempotency) in `ReadMe.md`.
 - [ ] **Commit Message:** "Finalized Part 2 rooms and added report answers"
 
 ## Phase 3: Sensors & Linking (Days 9-12)
