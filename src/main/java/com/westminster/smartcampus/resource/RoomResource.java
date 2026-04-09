@@ -7,6 +7,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -22,6 +23,18 @@ public class RoomResource {
     @GET
     public Collection<Room> getAllRooms() {
         return dataStore.getAllRooms();
+    }
+
+    @GET
+    @Path("/{id}")
+    public Response getRoomById(@PathParam("id") String id) {
+        Room room = dataStore.getRoom(id);
+        if (room == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(new ErrorMessage("Room not found"))
+                    .build();
+        }
+        return Response.ok(room).build();
     }
 
     @POST

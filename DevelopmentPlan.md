@@ -43,8 +43,8 @@ This plan breaks down the coursework into manageable daily tasks to ensure consi
 
 ### Day 6: Room Resource - Details & Storage Logic
 
-- [ ] Implement `GET /rooms/{id}`.
-- [ ] Connect `RoomResource` to `DataStore` logic.
+- [x] Implement `GET /rooms/{id}`.
+- [x] Connect `RoomResource` to `DataStore` logic.
 - [ ] **Commit Message:** "Added fetch single room functionality"
 
 ### Day 7: Room Deletion Logic
