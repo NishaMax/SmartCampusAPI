@@ -1,1 +1,90 @@
-For now something
+# Smart Campus API (5COSC022W Coursework)
+
+## Overview
+
+This project implements the **"Smart Campus" Sensor & Room Management API** using **JAX-RS (Jersey)**.
+
+- **API base path:** `/api/v1`
+- **No database:** uses in-memory data structures (`ConcurrentHashMap`, lists)
+- **Framework constraint:** **No Spring / Spring Boot**
+
+## Build
+
+### Prerequisites
+
+- Java JDK (compatible with the Maven compiler configuration)
+
+### Build the WAR
+
+```
+.tools/apache-maven-3.9.6/bin/mvn clean install
+```
+
+The build output will be created at `target/smart-campus-api.war`.
+
+## Part 1 – Report Answers
+
+### Q1) Default lifecycle of a JAX-RS Resource class
+
+By default, a JAX-RS resource class is typically treated as **per-request** by the runtime (i.e., a new instance may be created for each incoming HTTP request). While some implementations can be configured differently, designing as if resources are request-scoped is the safe assumption.
+
+**Impact on in-memory data structures:**
+
+- If resources are created per request, instance fields inside a resource class are **not a reliable place** to store shared state.
+- Shared state must be kept in a separate shared component (e.g., a singleton), and because multiple requests can be processed concurrently, the shared data must be protected from race conditions.
+
+In this project, shared state is centralized in a `DataStore` singleton backed by thread-safe data structures (`ConcurrentHashMap`) to prevent data loss and concurrent modification issues.
+
+### Q2) Why Hypermedia (HATEOAS) is advanced RESTful design
+
+Hypermedia (HATEOAS) means responses include **links / navigation** so clients can discover available resources and actions dynamically.
+
+**Benefits vs static documentation:**
+
+- Clients can follow links instead of hardcoding URL paths.
+- APIs can evolve with less client breakage (clients rely on discoverable links).
+- It reduces coupling between client and server and improves long-term maintainability.
+
+## Part 2 – Report Answers
+
+### Q3) Returning only IDs vs full room objects in a list
+
+If `GET /rooms` returns **only room IDs**, the response is smaller and cheaper to transmit (lower bandwidth) and can be faster for clients that only need a picker/list.
+
+If `GET /rooms` returns the **full room objects**, the client gets everything in one call (less round-trips) but the payload is larger, which increases bandwidth usage and client-side parsing costs.
+
+A common compromise is to return a summary representation (e.g., id + name) or use pagination. In this coursework, returning full objects is acceptable for simplicity, but the trade-off is larger responses as the number of rooms grows.
+
+### Q4) Is DELETE idempotent?
+
+A DELETE request is **idempotent** if repeating the exact same request results in the same server state.
+
+In this implementation:
+
+- First `DELETE /rooms/{id}` removes the room (server state changes).
+- Repeating the same DELETE again returns **404 Not Found** (because the room is already gone) and the server state remains unchanged.
+
+Therefore, the operation is **idempotent** with respect to server state (after the first call, repeated calls do not keep changing state).
+
+## Sample curl commands
+
+> Note: Update host/port depending on how you deploy the WAR.
+
+```bash
+# Discovery
+curl -i http://localhost:8080/api/v1
+
+# List rooms
+curl -i http://localhost:8080/api/v1/rooms
+
+# Create a room
+curl -i -X POST http://localhost:8080/api/v1/rooms \
+  -H "Content-Type: application/json" \
+  -d "{\"id\":\"LIB-301\",\"name\":\"Library Quiet Study\",\"capacity\":40}"
+
+# Get a room by id
+curl -i http://localhost:8080/api/v1/rooms/LIB-301
+
+# Delete a room
+curl -i -X DELETE http://localhost:8080/api/v1/rooms/LIB-301
+```
