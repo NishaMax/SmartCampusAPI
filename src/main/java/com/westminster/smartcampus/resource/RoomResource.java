@@ -4,6 +4,7 @@ import com.westminster.smartcampus.model.Room;
 import com.westminster.smartcampus.store.DataStore;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -74,6 +75,23 @@ public class RoomResource {
         return Response.created(URI.create("/api/v1/rooms/" + room.getId()))
                 .entity(room)
                 .build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response deleteRoom(@PathParam("id") String id) {
+        Room room = dataStore.getRoom(id);
+        if (room == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(new ErrorMessage("Room not found"))
+                    .build();
+        }
+
+        // TODO (Day 11 / Part 2 & Part 5): Block deletion if sensors exist for this room.
+        // For now we allow deletion unconditionally.
+
+        dataStore.deleteRoom(id);
+        return Response.noContent().build();
     }
 
     /**

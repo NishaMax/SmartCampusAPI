@@ -49,8 +49,8 @@ This plan breaks down the coursework into manageable daily tasks to ensure consi
 
 ### Day 7: Room Deletion Logic
 
-- [ ] Implement `DELETE /rooms/{id}`.
-- [ ] Add TODO logic for checking sensors (placeholder for now).
+- [x] Implement `DELETE /rooms/{id}`.
+- [x] Add TODO logic for checking sensors (placeholder for now).
 - [ ] **Commit Message:** "Added room deletion endpoint"
 
 ### Day 8: Part 2 Verification & Report
