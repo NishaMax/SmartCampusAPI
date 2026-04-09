@@ -5,18 +5,40 @@ import com.westminster.smartcampus.model.Sensor;
 import com.westminster.smartcampus.store.DataStore;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Path("/sensors")
 @Produces(MediaType.APPLICATION_JSON)
 public class SensorResource {
 
     private final DataStore dataStore = DataStore.getInstance();
+
+    @GET
+    public Collection<Sensor> getSensors(@QueryParam("type") String type) {
+        Collection<Sensor> all = dataStore.getAllSensors();
+        if (type == null || type.trim().isEmpty()) {
+            return all;
+        }
+
+        String wanted = type.trim();
+        List<Sensor> filtered = new ArrayList<>();
+        for (Sensor s : all) {
+            if (s != null && s.getType() != null && s.getType().equalsIgnoreCase(wanted)) {
+                filtered.add(s);
+            }
+        }
+        return filtered;
+    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

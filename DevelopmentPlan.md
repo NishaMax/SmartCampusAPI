@@ -70,8 +70,8 @@ This plan breaks down the coursework into manageable daily tasks to ensure consi
 
 ### Day 10: Sensor Resource - Listing & Filtering
 
-- [ ] Implement `GET /sensors`.
-- [ ] Add `@QueryParam("type")` filtering logic.
+- [x] Implement `GET /sensors`.
+- [x] Add `@QueryParam("type")` filtering logic.
 - [ ] **Commit Message:** "Added sensor listing with type filtering"
 
 ### Day 11: Linking Back to Rooms
