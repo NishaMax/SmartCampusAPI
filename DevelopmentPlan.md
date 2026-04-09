@@ -43,35 +43,35 @@ This plan breaks down the coursework into manageable daily tasks to ensure consi
 
 ### Day 6: Room Resource - Details & Storage Logic
 
-- [ ] Implement `GET /rooms/{id}`.
-- [ ] Connect `RoomResource` to `DataStore` logic.
+- [x] Implement `GET /rooms/{id}`.
+- [x] Connect `RoomResource` to `DataStore` logic.
 - [ ] **Commit Message:** "Added fetch single room functionality"
 
 ### Day 7: Room Deletion Logic
 
-- [ ] Implement `DELETE /rooms/{id}`.
-- [ ] Add TODO logic for checking sensors (placeholder for now).
+- [x] Implement `DELETE /rooms/{id}`.
+- [x] Add TODO logic for checking sensors (placeholder for now).
 - [ ] **Commit Message:** "Added room deletion endpoint"
 
 ### Day 8: Part 2 Verification & Report
 
-- [ ] Test Room endpoints with Curl/Postman.
-- [ ] **Report:** Answer Q3 (List vs Full Objects) and Q4 (Idempotency) in `ReadMe.md`.
+- [x] Test Room endpoints with Curl/Postman.
+- [x] **Report:** Answer Q3 (List vs Full Objects) and Q4 (Idempotency) in `ReadMe.md`.
 - [ ] **Commit Message:** "Finalized Part 2 rooms and added report answers"
 
 ## Phase 3: Sensors & Linking (Days 9-12)
 
 ### Day 9: Sensor Resource - Basic Creation
 
-- [ ] Create `SensorResource`.
-- [ ] Implement `POST /sensors`.
-- [ ] Add validation: Check if `roomId` exists in `DataStore`.
+- [x] Create `SensorResource`.
+- [x] Implement `POST /sensors`.
+- [x] Add validation: Check if `roomId` exists in `DataStore`.
 - [ ] **Commit Message:** "Implemented sensor creation with room validation"
 
 ### Day 10: Sensor Resource - Listing & Filtering
 
-- [ ] Implement `GET /sensors`.
-- [ ] Add `@QueryParam("type")` filtering logic.
+- [x] Implement `GET /sensors`.
+- [x] Add `@QueryParam("type")` filtering logic.
 - [ ] **Commit Message:** "Added sensor listing with type filtering"
 
 ### Day 11: Linking Back to Rooms

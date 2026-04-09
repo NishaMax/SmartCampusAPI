@@ -45,6 +45,46 @@ Hypermedia (HATEOAS) means responses include **links / navigation** so clients c
 - APIs can evolve with less client breakage (clients rely on discoverable links).
 - It reduces coupling between client and server and improves long-term maintainability.
 
-## Endpoints (so far)
+## Part 2 – Report Answers
 
-- `GET /api/v1` – Discovery endpoint (returns version info, contact info, and top-level resource links)
+### Q3) Returning only IDs vs full room objects in a list
+
+If `GET /rooms` returns **only room IDs**, the response is smaller and cheaper to transmit (lower bandwidth) and can be faster for clients that only need a picker/list.
+
+If `GET /rooms` returns the **full room objects**, the client gets everything in one call (less round-trips) but the payload is larger, which increases bandwidth usage and client-side parsing costs.
+
+A common compromise is to return a summary representation (e.g., id + name) or use pagination. In this coursework, returning full objects is acceptable for simplicity, but the trade-off is larger responses as the number of rooms grows.
+
+### Q4) Is DELETE idempotent?
+
+A DELETE request is **idempotent** if repeating the exact same request results in the same server state.
+
+In this implementation:
+
+- First `DELETE /rooms/{id}` removes the room (server state changes).
+- Repeating the same DELETE again returns **404 Not Found** (because the room is already gone) and the server state remains unchanged.
+
+Therefore, the operation is **idempotent** with respect to server state (after the first call, repeated calls do not keep changing state).
+
+## Sample curl commands
+
+> Note: Update host/port depending on how you deploy the WAR.
+
+```bash
+# Discovery
+curl -i http://localhost:8080/api/v1
+
+# List rooms
+curl -i http://localhost:8080/api/v1/rooms
+
+# Create a room
+curl -i -X POST http://localhost:8080/api/v1/rooms \
+  -H "Content-Type: application/json" \
+  -d "{\"id\":\"LIB-301\",\"name\":\"Library Quiet Study\",\"capacity\":40}"
+
+# Get a room by id
+curl -i http://localhost:8080/api/v1/rooms/LIB-301
+
+# Delete a room
+curl -i -X DELETE http://localhost:8080/api/v1/rooms/LIB-301
+```

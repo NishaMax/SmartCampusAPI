@@ -1,0 +1,80 @@
+{
+  "info": {
+    "name": "SmartCampusAPI",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Discovery - GET /api/v1",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/api/v1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1"]
+        }
+      }
+    },
+    {
+      "name": "Rooms - GET /api/v1/rooms",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/api/v1/rooms",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "rooms"]
+        }
+      }
+    },
+    {
+      "name": "Rooms - POST /api/v1/rooms",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"LIB-301\",\n  \"name\": \"Library Quiet Study\",\n  \"capacity\": 40\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/rooms",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "rooms"]
+        }
+      }
+    },
+    {
+      "name": "Rooms - GET /api/v1/rooms/{id}",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/api/v1/rooms/LIB-301",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "rooms", "LIB-301"]
+        }
+      }
+    },
+    {
+      "name": "Rooms - DELETE /api/v1/rooms/{id}",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "http://localhost:8080/api/v1/rooms/LIB-301",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "rooms", "LIB-301"]
+        }
+      }
+    }
+  ]
+}
