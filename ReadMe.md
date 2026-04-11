@@ -66,6 +66,77 @@ In this implementation:
 
 Therefore, the operation is **idempotent** with respect to server state (after the first call, repeated calls do not keep changing state).
 
+## Part 3 – Report Answers
+
+### Q5) Consequences of @Consumes(MediaType.APPLICATION_JSON)
+
+Using `@Consumes(MediaType.APPLICATION_JSON)` on a `POST` endpoint tells JAX-RS that the method only accepts requests whose `Content-Type` is `application/json`.
+
+If a client sends the payload with a different content type (e.g., `text/plain` or `application/xml`):
+
+- The JAX-RS runtime will not select this method for handling the request body.
+- The server will typically respond with **415 Unsupported Media Type** (or a similar client error) because it cannot find a suitable message body reader for that media type / the resource method refuses it.
+
+This protects the API by enforcing a clear contract and preventing ambiguous parsing of request bodies.
+
+### Q6) Why query parameters are better than putting the filter in the path
+
+`GET /sensors?type=CO2` is generally preferred for filtering/search because:
+
+- Filtering is optional and combinable (later you can add `?type=CO2&status=ACTIVE`, pagination, sorting, etc.).
+- The canonical “resource collection” remains `/sensors`; query params refine the representation.
+- It avoids creating many extra URL path variations and keeps routing simpler.
+
+A path design like `/sensors/type/CO2` can work, but it is less flexible for multiple filters and tends to mix “resource identity” with “search criteria”.
+
+## Part 4 – Report Answers
+
+### Q7) Benefits of the Sub-Resource Locator pattern
+
+The Sub-Resource Locator pattern helps manage complexity in larger APIs by **delegating nested resource logic** to dedicated classes.
+
+Benefits include:
+
+- **Separation of concerns:** `SensorResource` remains focused on `/sensors` collection logic, while `SensorReadingResource` focuses on `/sensors/{id}/readings`.
+- **Better maintainability:** nested logic can grow (validation, business rules, pagination) without turning one class into a large “god controller”.
+- **Reusability and testability:** each resource class can be tested and evolved independently.
+- **Clearer routing/structure:** the code mirrors the URI hierarchy (Sensor → Readings).
+
+## Part 5 – Report Answers (Error Handling & Observability)
+
+### Q8) Why return 422 (Unprocessable Entity) instead of 404 in some cases?
+
+A **404 Not Found** means the **requested URI/resource itself does not exist** (e.g., `GET /rooms/XYZ` when there is no room with id `XYZ`).
+
+A **422 Unprocessable Entity** is useful when the **target endpoint exists**, and the request body is syntactically valid JSON, but a _semantic constraint_ fails. In this API the main example is creating a sensor with a `roomId` that does not exist:
+
+- The client is correctly calling `POST /sensors` (endpoint exists)
+- The body is valid JSON and matches the `Sensor` shape
+- But `roomId` references a room that is missing, so the server cannot process the request as instructed
+
+Using 422 communicates “your request structure is fine, but the linked/related entity makes it impossible to apply”. It is more precise than 404 for this scenario.
+
+### Q9) Why is returning stack traces in API error responses risky?
+
+Returning stack traces (or internal exception messages) can leak sensitive implementation details such as:
+
+- class/package names and library/framework versions
+- internal file paths and configuration hints
+- details of validation/business rules that help attackers probe the API
+
+It also increases coupling: clients may start relying on internal error strings that can change. For these reasons, this API uses a generic **500** JSON response for unexpected errors (via a catch-all exception mapper) and returns only safe, intentionally designed error messages for known/expected failures.
+
+### Q10) Why use JAX-RS filters for logging instead of manual logging in each resource method?
+
+Using a `ContainerRequestFilter` / `ContainerResponseFilter` is preferable because logging is a **cross-cutting concern**:
+
+- **Consistency:** one filter produces a uniform log format (method, URI, status, timing) for every endpoint.
+- **Coverage:** the response filter runs even when errors happen (including exceptions mapped by `ExceptionMapper`s), so failures are logged too.
+- **Less duplication:** avoids repeating `System.out.println(...)` in every resource class/method.
+- **Maintainability:** log behaviour can be changed in one place (e.g., add headers, correlation ids, or switch to a logger) without touching every endpoint.
+
+In short, filters centralize a shared concern and keep resource classes focused on request handling/business logic.
+
 ## Sample curl commands
 
 > Note: Update host/port depending on how you deploy the WAR.
@@ -87,4 +158,23 @@ curl -i http://localhost:8080/api/v1/rooms/LIB-301
 
 # Delete a room
 curl -i -X DELETE http://localhost:8080/api/v1/rooms/LIB-301
+
+# Create a sensor (assumes room LIB-301 exists)
+curl -i -X POST http://localhost:8080/api/v1/sensors \
+  -H "Content-Type: application/json" \
+  -d "{\"id\":\"TEMP-001\",\"type\":\"Temperature\",\"status\":\"ACTIVE\",\"currentValue\":0,\"roomId\":\"LIB-301\"}"
+
+# List sensors
+curl -i http://localhost:8080/api/v1/sensors
+
+# Filter sensors by type
+curl -i "http://localhost:8080/api/v1/sensors?type=Temperature"
+
+# Add a reading to a sensor
+curl -i -X POST http://localhost:8080/api/v1/sensors/TEMP-001/readings \
+  -H "Content-Type: application/json" \
+  -d "{\"id\":\"R-001\",\"timestamp\":1710000000000,\"value\":23.5}"
+
+# Get reading history
+curl -i http://localhost:8080/api/v1/sensors/TEMP-001/readings
 ```
