@@ -1,5 +1,8 @@
 package com.westminster.smartcampus.resource;
 
+import com.westminster.smartcampus.exception.BadRequestException;
+import com.westminster.smartcampus.exception.ConflictException;
+import com.westminster.smartcampus.exception.UnprocessableEntityException;
 import com.westminster.smartcampus.model.Room;
 import com.westminster.smartcampus.model.Sensor;
 import com.westminster.smartcampus.store.DataStore;
@@ -8,6 +11,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -40,46 +44,38 @@ public class SensorResource {
         return filtered;
     }
 
+    @Path("/{sensorId}/readings")
+    public SensorReadingResource getSensorReadingResource(@PathParam("sensorId") String sensorId) {
+        return new SensorReadingResource(sensorId);
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createSensor(Sensor sensor) {
         if (sensor == null || sensor.getId() == null || sensor.getId().trim().isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new ErrorMessage("Sensor id is required"))
-                    .build();
+            throw new BadRequestException("Sensor id is required");
         }
         if (sensor.getType() == null || sensor.getType().trim().isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new ErrorMessage("Sensor type is required"))
-                    .build();
+            throw new BadRequestException("Sensor type is required");
         }
         if (sensor.getStatus() == null || sensor.getStatus().trim().isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new ErrorMessage("Sensor status is required"))
-                    .build();
+            throw new BadRequestException("Sensor status is required");
         }
         if (sensor.getRoomId() == null || sensor.getRoomId().trim().isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new ErrorMessage("Sensor roomId is required"))
-                    .build();
+            throw new BadRequestException("Sensor roomId is required");
         }
 
         Room room = dataStore.getRoom(sensor.getRoomId());
         if (room == null) {
-            // Part 5 will introduce a dedicated 422 exception + mapper.
-            return Response.status(422)
-                    .entity(new ErrorMessage("Referenced roomId does not exist"))
-                    .build();
+            throw new UnprocessableEntityException("Referenced roomId does not exist");
         }
 
         boolean alreadyExists = dataStore.getSensor(sensor.getId()) != null;
-        dataStore.upsertSensor(sensor);
-
         if (alreadyExists) {
-            return Response.status(Response.Status.CONFLICT)
-                    .entity(new ErrorMessage("Sensor with id already exists"))
-                    .build();
+            throw new ConflictException("Sensor with id already exists");
         }
+
+        dataStore.upsertSensor(sensor);
 
         // Link sensor to the room
         if (!room.getSensorIds().contains(sensor.getId())) {
@@ -90,27 +86,5 @@ public class SensorResource {
         return Response.created(URI.create("/api/v1/sensors/" + sensor.getId()))
                 .entity(sensor)
                 .build();
-    }
-
-    /**
-     * Minimal error body (kept simple for now).
-     */
-    public static class ErrorMessage {
-        private String message;
-
-        public ErrorMessage() {
-        }
-
-        public ErrorMessage(String message) {
-            this.message = message;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
     }
 }

@@ -76,71 +76,71 @@ This plan breaks down the coursework into manageable daily tasks to ensure consi
 
 ### Day 11: Linking Back to Rooms
 
-- [ ] Update `RoomResource` DELETE logic.
-- [ ] **Constraint:** Block deletion if sensors exist for that room.
+- [x] Update `RoomResource` DELETE logic.
+- [x] **Constraint:** Block deletion if sensors exist for that room.
 - [ ] **Commit Message:** "Enforced constraint: cannot delete room with sensors"
 
 ### Day 12: Part 3 Report & Cleanup
 
-- [ ] Refactor code if needed.
-- [ ] **Report:** Answer Q5 (Media Types) and Q6 (Query Params) in `ReadMe.md`.
+- [x] Refactor code if needed.
+- [x] **Report:** Answer Q5 (Media Types) and Q6 (Query Params) in `ReadMe.md`.
 - [ ] **Commit Message:** "Completed Part 3 report questions"
 
 ## Phase 4: Sub-Resources & Readings (Days 13-16)
 
 ### Day 13: Sub-Resource Setup
 
-- [ ] Modify `SensorResource` to handle `{id}/readings`.
-- [ ] Create `SensorReadingResource`.
-- [ ] Implement "Sub-resource locator" pattern.
+- [x] Modify `SensorResource` to handle `{id}/readings`.
+- [x] Create `SensorReadingResource`.
+- [x] Implement "Sub-resource locator" pattern.
 - [ ] **Commit Message:** "Implemented sub-resource locator structure"
 
 ### Day 14: Reading Operations
 
-- [ ] In `SensorReadingResource`: Implement `GET /` (history).
-- [ ] In `SensorReadingResource`: Implement `POST /` (add reading).
+- [x] In `SensorReadingResource`: Implement `GET /` (history).
+- [x] In `SensorReadingResource`: Implement `POST /` (add reading).
 - [ ] **Report:** Answer Q7 (Sub-Resource Locator benefits).
 - [ ] **Commit Message:** "Added reading history and creation"
 
 ### Day 15: Side Effects (Business Logic)
 
-- [ ] Update `POST` reading logic.
-- [ ] **Side Effect:** Update `currentValue` in parent `Sensor` object.
+- [x] Update `POST` reading logic.
+- [x] **Side Effect:** Update `currentValue` in parent `Sensor` object.
 - [ ] **Commit Message:** "Implemented side-effects: updating sensor current value"
 
 ### Day 16: Part 4 Testing
 
-- [ ] Verify deep nesting: `POST /sensors/S1/readings`.
-- [ ] Verify parent update.
+- [x] Verify deep nesting: `POST /sensors/S1/readings`.
+- [x] Verify parent update.
 - [ ] **Commit Message:** "Refined sub-resource logic and tests"
 
 ## Phase 5: Error Handling & Observability (Days 17-19)
 
 ### Day 17: Custom Exceptions (409 & 422)
 
-- [ ] Create `RoomNotEmptyException` + Mapper (409 Conflict).
-- [ ] Create `LinkedResourceNotFoundException` + Mapper (422 Unprocessable).
+- [x] Add API error model + ExceptionMapper for consistent JSON error responses.
+- [x] Add custom exceptions for 409 Conflict and 422 Unprocessable Entity (generic `ConflictException`, `UnprocessableEntityException`).
 - [ ] **Commit Message:** "Added 409 and 422 exception handling"
 
 ### Day 18: Security & Catch-all (403 & 500)
 
-- [ ] Create `SensorUnavailableException` (403).
-- [ ] Create generic `ExceptionMapper<Throwable>` (500).
-- [ ] **Report:** Answer Q8 (422 vs 404) and Q9 (Stack trace risks).
+- [x] Create `SensorUnavailableException` (403).
+- [x] Create generic `ExceptionMapper<Throwable>` (500).
+- [x] **Report:** Answer Q8 (422 vs 404) and Q9 (Stack trace risks).
 - [ ] **Commit Message:** "Implemented security exception mappers and 500 catch-all"
 
 ### Day 19: Logging Filters
 
-- [ ] Implement `ContainerRequestFilter` & `ContainerResponseFilter`.
-- [ ] Log method, URI, and status codes.
-- [ ] **Report:** Answer Q10 (Filters vs manual logging).
+- [x] Implement `ContainerRequestFilter` & `ContainerResponseFilter`.
+- [x] Log method, URI, and status codes.
+- [x] **Report:** Answer Q10 (Filters vs manual logging).
 - [ ] **Commit Message:** "Added request/response logging filters"
 
 ## Phase 6: Final Polish (Day 20)
 
 ### Day 20: Documentation & Submission
 
-- [ ] Update `ReadMe.md` with Build instructions.
-- [ ] Add 5 sample Curl commands.
+- [x] Update `ReadMe.md` with Build instructions.
+- [x] Add 5 sample Curl commands.
 - [ ] Check against constraints (No Spring, No DB).
 - [ ] **Commit Message:** "Final submission polish and documentation"
