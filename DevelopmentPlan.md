@@ -76,8 +76,8 @@ This plan breaks down the coursework into manageable daily tasks to ensure consi
 
 ### Day 11: Linking Back to Rooms
 
-- [ ] Update `RoomResource` DELETE logic.
-- [ ] **Constraint:** Block deletion if sensors exist for that room.
+- [x] Update `RoomResource` DELETE logic.
+- [x] **Constraint:** Block deletion if sensors exist for that room.
 - [ ] **Commit Message:** "Enforced constraint: cannot delete room with sensors"
 
 ### Day 12: Part 3 Report & Cleanup

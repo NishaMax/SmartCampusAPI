@@ -87,8 +87,13 @@ public class RoomResource {
                     .build();
         }
 
-        // TODO (Day 11 / Part 2 & Part 5): Block deletion if sensors exist for this room.
-        // For now we allow deletion unconditionally.
+        // Constraint (Part 2): a room cannot be deleted if it still has sensors assigned.
+        if (room.getSensorIds() != null && !room.getSensorIds().isEmpty()) {
+            // Part 5 will replace this with RoomNotEmptyException + mapper returning 409.
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(new ErrorMessage("Room cannot be deleted while sensors are assigned"))
+                    .build();
+        }
 
         dataStore.deleteRoom(id);
         return Response.noContent().build();
