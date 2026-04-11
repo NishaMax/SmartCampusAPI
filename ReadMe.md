@@ -66,6 +66,29 @@ In this implementation:
 
 Therefore, the operation is **idempotent** with respect to server state (after the first call, repeated calls do not keep changing state).
 
+## Part 3 – Report Answers
+
+### Q5) Consequences of @Consumes(MediaType.APPLICATION_JSON)
+
+Using `@Consumes(MediaType.APPLICATION_JSON)` on a `POST` endpoint tells JAX-RS that the method only accepts requests whose `Content-Type` is `application/json`.
+
+If a client sends the payload with a different content type (e.g., `text/plain` or `application/xml`):
+
+- The JAX-RS runtime will not select this method for handling the request body.
+- The server will typically respond with **415 Unsupported Media Type** (or a similar client error) because it cannot find a suitable message body reader for that media type / the resource method refuses it.
+
+This protects the API by enforcing a clear contract and preventing ambiguous parsing of request bodies.
+
+### Q6) Why query parameters are better than putting the filter in the path
+
+`GET /sensors?type=CO2` is generally preferred for filtering/search because:
+
+- Filtering is optional and combinable (later you can add `?type=CO2&status=ACTIVE`, pagination, sorting, etc.).
+- The canonical “resource collection” remains `/sensors`; query params refine the representation.
+- It avoids creating many extra URL path variations and keeps routing simpler.
+
+A path design like `/sensors/type/CO2` can work, but it is less flexible for multiple filters and tends to mix “resource identity” with “search criteria”.
+
 ## Sample curl commands
 
 > Note: Update host/port depending on how you deploy the WAR.

@@ -82,17 +82,17 @@ This plan breaks down the coursework into manageable daily tasks to ensure consi
 
 ### Day 12: Part 3 Report & Cleanup
 
-- [ ] Refactor code if needed.
-- [ ] **Report:** Answer Q5 (Media Types) and Q6 (Query Params) in `ReadMe.md`.
+- [x] Refactor code if needed.
+- [x] **Report:** Answer Q5 (Media Types) and Q6 (Query Params) in `ReadMe.md`.
 - [ ] **Commit Message:** "Completed Part 3 report questions"
 
 ## Phase 4: Sub-Resources & Readings (Days 13-16)
 
 ### Day 13: Sub-Resource Setup
 
-- [ ] Modify `SensorResource` to handle `{id}/readings`.
-- [ ] Create `SensorReadingResource`.
-- [ ] Implement "Sub-resource locator" pattern.
+- [x] Modify `SensorResource` to handle `{id}/readings`.
+- [x] Create `SensorReadingResource`.
+- [x] Implement "Sub-resource locator" pattern.
 - [ ] **Commit Message:** "Implemented sub-resource locator structure"
 
 ### Day 14: Reading Operations
