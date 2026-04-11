@@ -97,8 +97,8 @@ This plan breaks down the coursework into manageable daily tasks to ensure consi
 
 ### Day 14: Reading Operations
 
-- [ ] In `SensorReadingResource`: Implement `GET /` (history).
-- [ ] In `SensorReadingResource`: Implement `POST /` (add reading).
+- [x] In `SensorReadingResource`: Implement `GET /` (history).
+- [x] In `SensorReadingResource`: Implement `POST /` (add reading).
 - [ ] **Report:** Answer Q7 (Sub-Resource Locator benefits).
 - [ ] **Commit Message:** "Added reading history and creation"
 
