@@ -118,21 +118,21 @@ This plan breaks down the coursework into manageable daily tasks to ensure consi
 
 ### Day 17: Custom Exceptions (409 & 422)
 
-- [ ] Create `RoomNotEmptyException` + Mapper (409 Conflict).
-- [ ] Create `LinkedResourceNotFoundException` + Mapper (422 Unprocessable).
+- [x] Add API error model + ExceptionMapper for consistent JSON error responses.
+- [x] Add custom exceptions for 409 Conflict and 422 Unprocessable Entity (generic `ConflictException`, `UnprocessableEntityException`).
 - [ ] **Commit Message:** "Added 409 and 422 exception handling"
 
 ### Day 18: Security & Catch-all (403 & 500)
 
-- [ ] Create `SensorUnavailableException` (403).
-- [ ] Create generic `ExceptionMapper<Throwable>` (500).
+- [x] Create `SensorUnavailableException` (403).
+- [x] Create generic `ExceptionMapper<Throwable>` (500).
 - [ ] **Report:** Answer Q8 (422 vs 404) and Q9 (Stack trace risks).
 - [ ] **Commit Message:** "Implemented security exception mappers and 500 catch-all"
 
 ### Day 19: Logging Filters
 
-- [ ] Implement `ContainerRequestFilter` & `ContainerResponseFilter`.
-- [ ] Log method, URI, and status codes.
+- [x] Implement `ContainerRequestFilter` & `ContainerResponseFilter`.
+- [x] Log method, URI, and status codes.
 - [ ] **Report:** Answer Q10 (Filters vs manual logging).
 - [ ] **Commit Message:** "Added request/response logging filters"
 

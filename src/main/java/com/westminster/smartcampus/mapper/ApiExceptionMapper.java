@@ -31,6 +31,7 @@ public class ApiExceptionMapper implements ExceptionMapper<ApiException> {
     private int mapStatus(ApiException e) {
         String code = e.getCode();
         if ("BAD_REQUEST".equals(code)) return 400;
+        if ("FORBIDDEN".equals(code)) return 403;
         if ("NOT_FOUND".equals(code)) return 404;
         if ("CONFLICT".equals(code)) return 409;
         if ("UNPROCESSABLE_ENTITY".equals(code)) return 422;

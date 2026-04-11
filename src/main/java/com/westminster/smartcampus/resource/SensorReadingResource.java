@@ -2,6 +2,7 @@ package com.westminster.smartcampus.resource;
 
 import com.westminster.smartcampus.exception.BadRequestException;
 import com.westminster.smartcampus.exception.NotFoundException;
+import com.westminster.smartcampus.exception.SensorUnavailableException;
 import com.westminster.smartcampus.model.Sensor;
 import com.westminster.smartcampus.model.SensorReading;
 import com.westminster.smartcampus.store.DataStore;
@@ -59,6 +60,12 @@ public class SensorReadingResource {
         if (sensor == null) {
             throw new NotFoundException("Sensor not found");
         }
+
+        // "Security" rule for coursework: OFFLINE sensors reject new readings.
+        if (sensor.getStatus() != null && sensor.getStatus().equalsIgnoreCase("OFFLINE")) {
+            throw new SensorUnavailableException("Sensor is OFFLINE and cannot accept readings");
+        }
+
         if (reading == null || reading.getId() == null || reading.getId().trim().isEmpty()) {
             throw new BadRequestException("Reading id is required");
         }
