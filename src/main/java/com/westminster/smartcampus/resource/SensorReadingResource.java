@@ -69,6 +69,10 @@ public class SensorReadingResource {
 
         dataStore.addReading(sensorId, reading);
 
+        // Side-effect: keep Sensor.currentValue consistent with latest reading.
+        sensor.setCurrentValue(reading.getValue());
+        dataStore.upsertSensor(sensor);
+
         return Response.created(URI.create("/api/v1/sensors/" + sensorId + "/readings/" + reading.getId()))
                 .entity(reading)
                 .build();

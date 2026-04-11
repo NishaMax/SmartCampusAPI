@@ -104,8 +104,8 @@ This plan breaks down the coursework into manageable daily tasks to ensure consi
 
 ### Day 15: Side Effects (Business Logic)
 
-- [ ] Update `POST` reading logic.
-- [ ] **Side Effect:** Update `currentValue` in parent `Sensor` object.
+- [x] Update `POST` reading logic.
+- [x] **Side Effect:** Update `currentValue` in parent `Sensor` object.
 - [ ] **Commit Message:** "Implemented side-effects: updating sensor current value"
 
 ### Day 16: Part 4 Testing

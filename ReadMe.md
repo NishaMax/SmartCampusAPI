@@ -89,6 +89,19 @@ This protects the API by enforcing a clear contract and preventing ambiguous par
 
 A path design like `/sensors/type/CO2` can work, but it is less flexible for multiple filters and tends to mix “resource identity” with “search criteria”.
 
+## Part 4 – Report Answers
+
+### Q7) Benefits of the Sub-Resource Locator pattern
+
+The Sub-Resource Locator pattern helps manage complexity in larger APIs by **delegating nested resource logic** to dedicated classes.
+
+Benefits include:
+
+- **Separation of concerns:** `SensorResource` remains focused on `/sensors` collection logic, while `SensorReadingResource` focuses on `/sensors/{id}/readings`.
+- **Better maintainability:** nested logic can grow (validation, business rules, pagination) without turning one class into a large “god controller”.
+- **Reusability and testability:** each resource class can be tested and evolved independently.
+- **Clearer routing/structure:** the code mirrors the URI hierarchy (Sensor → Readings).
+
 ## Sample curl commands
 
 > Note: Update host/port depending on how you deploy the WAR.
