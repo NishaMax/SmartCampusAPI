@@ -1,5 +1,8 @@
 package com.westminster.smartcampus.resource;
 
+import com.westminster.smartcampus.exception.BadRequestException;
+import com.westminster.smartcampus.exception.ConflictException;
+import com.westminster.smartcampus.exception.NotFoundException;
 import com.westminster.smartcampus.model.Room;
 import com.westminster.smartcampus.store.DataStore;
 
@@ -31,9 +34,7 @@ public class RoomResource {
     public Response getRoomById(@PathParam("id") String id) {
         Room room = dataStore.getRoom(id);
         if (room == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity(new ErrorMessage("Room not found"))
-                    .build();
+            throw new NotFoundException("Room not found");
         }
         return Response.ok(room).build();
     }
@@ -42,35 +43,26 @@ public class RoomResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createRoom(Room room) {
         if (room == null || room.getId() == null || room.getId().trim().isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new ErrorMessage("Room id is required"))
-                    .build();
+            throw new BadRequestException("Room id is required");
         }
         if (room.getName() == null || room.getName().trim().isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new ErrorMessage("Room name is required"))
-                    .build();
+            throw new BadRequestException("Room name is required");
         }
         if (room.getCapacity() < 0) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new ErrorMessage("Room capacity must be >= 0"))
-                    .build();
+            throw new BadRequestException("Room capacity must be >= 0");
         }
 
-        // Ensure sensorIds isn't null (so JSON serialization stays consistent)
+        // Keep JSON consistent: ensure sensorIds is never null.
         if (room.getSensorIds() == null) {
             room.setSensorIds(null);
         }
 
         boolean alreadyExists = dataStore.getRoom(room.getId()) != null;
-        dataStore.upsertRoom(room);
-
         if (alreadyExists) {
-            // If room exists, treat as conflict (we'll refine behaviour later if needed)
-            return Response.status(Response.Status.CONFLICT)
-                    .entity(new ErrorMessage("Room with id already exists"))
-                    .build();
+            throw new ConflictException("Room with id already exists");
         }
+
+        dataStore.upsertRoom(room);
 
         return Response.created(URI.create("/api/v1/rooms/" + room.getId()))
                 .entity(room)
@@ -82,42 +74,15 @@ public class RoomResource {
     public Response deleteRoom(@PathParam("id") String id) {
         Room room = dataStore.getRoom(id);
         if (room == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity(new ErrorMessage("Room not found"))
-                    .build();
+            throw new NotFoundException("Room not found");
         }
 
-        // Constraint (Part 2): a room cannot be deleted if it still has sensors assigned.
+        // Constraint: a room cannot be deleted if it still has sensors assigned.
         if (room.getSensorIds() != null && !room.getSensorIds().isEmpty()) {
-            // Part 5 will replace this with RoomNotEmptyException + mapper returning 409.
-            return Response.status(Response.Status.CONFLICT)
-                    .entity(new ErrorMessage("Room cannot be deleted while sensors are assigned"))
-                    .build();
+            throw new ConflictException("Room cannot be deleted while sensors are assigned");
         }
 
         dataStore.deleteRoom(id);
         return Response.noContent().build();
-    }
-
-    /**
-     * Minimal error body (kept simple for now).
-     */
-    public static class ErrorMessage {
-        private String message;
-
-        public ErrorMessage() {
-        }
-
-        public ErrorMessage(String message) {
-            this.message = message;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
     }
 }

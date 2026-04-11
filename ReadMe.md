@@ -123,4 +123,23 @@ curl -i http://localhost:8080/api/v1/rooms/LIB-301
 
 # Delete a room
 curl -i -X DELETE http://localhost:8080/api/v1/rooms/LIB-301
+
+# Create a sensor (assumes room LIB-301 exists)
+curl -i -X POST http://localhost:8080/api/v1/sensors \
+  -H "Content-Type: application/json" \
+  -d "{\"id\":\"TEMP-001\",\"type\":\"Temperature\",\"status\":\"ACTIVE\",\"currentValue\":0,\"roomId\":\"LIB-301\"}"
+
+# List sensors
+curl -i http://localhost:8080/api/v1/sensors
+
+# Filter sensors by type
+curl -i "http://localhost:8080/api/v1/sensors?type=Temperature"
+
+# Add a reading to a sensor
+curl -i -X POST http://localhost:8080/api/v1/sensors/TEMP-001/readings \
+  -H "Content-Type: application/json" \
+  -d "{\"id\":\"R-001\",\"timestamp\":1710000000000,\"value\":23.5}"
+
+# Get reading history
+curl -i http://localhost:8080/api/v1/sensors/TEMP-001/readings
 ```

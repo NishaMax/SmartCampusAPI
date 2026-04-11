@@ -1,5 +1,7 @@
 package com.westminster.smartcampus.resource;
 
+import com.westminster.smartcampus.exception.BadRequestException;
+import com.westminster.smartcampus.exception.NotFoundException;
 import com.westminster.smartcampus.model.Sensor;
 import com.westminster.smartcampus.model.SensorReading;
 import com.westminster.smartcampus.store.DataStore;
@@ -40,9 +42,7 @@ public class SensorReadingResource {
     public Response getReadingHistory() {
         Sensor sensor = dataStore.getSensor(sensorId);
         if (sensor == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity(new ErrorMessage("Sensor not found"))
-                    .build();
+            throw new NotFoundException("Sensor not found");
         }
 
         List<SensorReading> history = dataStore.getReadingsForSensor(sensorId);
@@ -57,14 +57,10 @@ public class SensorReadingResource {
     public Response addReading(SensorReading reading) {
         Sensor sensor = dataStore.getSensor(sensorId);
         if (sensor == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity(new ErrorMessage("Sensor not found"))
-                    .build();
+            throw new NotFoundException("Sensor not found");
         }
         if (reading == null || reading.getId() == null || reading.getId().trim().isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new ErrorMessage("Reading id is required"))
-                    .build();
+            throw new BadRequestException("Reading id is required");
         }
 
         dataStore.addReading(sensorId, reading);
@@ -76,27 +72,5 @@ public class SensorReadingResource {
         return Response.created(URI.create("/api/v1/sensors/" + sensorId + "/readings/" + reading.getId()))
                 .entity(reading)
                 .build();
-    }
-
-    /**
-     * Minimal error body (kept simple for now).
-     */
-    public static class ErrorMessage {
-        private String message;
-
-        public ErrorMessage() {
-        }
-
-        public ErrorMessage(String message) {
-            this.message = message;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
     }
 }

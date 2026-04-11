@@ -110,8 +110,8 @@ This plan breaks down the coursework into manageable daily tasks to ensure consi
 
 ### Day 16: Part 4 Testing
 
-- [ ] Verify deep nesting: `POST /sensors/S1/readings`.
-- [ ] Verify parent update.
+- [x] Verify deep nesting: `POST /sensors/S1/readings`.
+- [x] Verify parent update.
 - [ ] **Commit Message:** "Refined sub-resource logic and tests"
 
 ## Phase 5: Error Handling & Observability (Days 17-19)
