@@ -126,21 +126,21 @@ This plan breaks down the coursework into manageable daily tasks to ensure consi
 
 - [x] Create `SensorUnavailableException` (403).
 - [x] Create generic `ExceptionMapper<Throwable>` (500).
-- [ ] **Report:** Answer Q8 (422 vs 404) and Q9 (Stack trace risks).
+- [x] **Report:** Answer Q8 (422 vs 404) and Q9 (Stack trace risks).
 - [ ] **Commit Message:** "Implemented security exception mappers and 500 catch-all"
 
 ### Day 19: Logging Filters
 
 - [x] Implement `ContainerRequestFilter` & `ContainerResponseFilter`.
 - [x] Log method, URI, and status codes.
-- [ ] **Report:** Answer Q10 (Filters vs manual logging).
+- [x] **Report:** Answer Q10 (Filters vs manual logging).
 - [ ] **Commit Message:** "Added request/response logging filters"
 
 ## Phase 6: Final Polish (Day 20)
 
 ### Day 20: Documentation & Submission
 
-- [ ] Update `ReadMe.md` with Build instructions.
-- [ ] Add 5 sample Curl commands.
+- [x] Update `ReadMe.md` with Build instructions.
+- [x] Add 5 sample Curl commands.
 - [ ] Check against constraints (No Spring, No DB).
 - [ ] **Commit Message:** "Final submission polish and documentation"

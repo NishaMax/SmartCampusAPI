@@ -102,6 +102,41 @@ Benefits include:
 - **Reusability and testability:** each resource class can be tested and evolved independently.
 - **Clearer routing/structure:** the code mirrors the URI hierarchy (Sensor → Readings).
 
+## Part 5 – Report Answers (Error Handling & Observability)
+
+### Q8) Why return 422 (Unprocessable Entity) instead of 404 in some cases?
+
+A **404 Not Found** means the **requested URI/resource itself does not exist** (e.g., `GET /rooms/XYZ` when there is no room with id `XYZ`).
+
+A **422 Unprocessable Entity** is useful when the **target endpoint exists**, and the request body is syntactically valid JSON, but a _semantic constraint_ fails. In this API the main example is creating a sensor with a `roomId` that does not exist:
+
+- The client is correctly calling `POST /sensors` (endpoint exists)
+- The body is valid JSON and matches the `Sensor` shape
+- But `roomId` references a room that is missing, so the server cannot process the request as instructed
+
+Using 422 communicates “your request structure is fine, but the linked/related entity makes it impossible to apply”. It is more precise than 404 for this scenario.
+
+### Q9) Why is returning stack traces in API error responses risky?
+
+Returning stack traces (or internal exception messages) can leak sensitive implementation details such as:
+
+- class/package names and library/framework versions
+- internal file paths and configuration hints
+- details of validation/business rules that help attackers probe the API
+
+It also increases coupling: clients may start relying on internal error strings that can change. For these reasons, this API uses a generic **500** JSON response for unexpected errors (via a catch-all exception mapper) and returns only safe, intentionally designed error messages for known/expected failures.
+
+### Q10) Why use JAX-RS filters for logging instead of manual logging in each resource method?
+
+Using a `ContainerRequestFilter` / `ContainerResponseFilter` is preferable because logging is a **cross-cutting concern**:
+
+- **Consistency:** one filter produces a uniform log format (method, URI, status, timing) for every endpoint.
+- **Coverage:** the response filter runs even when errors happen (including exceptions mapped by `ExceptionMapper`s), so failures are logged too.
+- **Less duplication:** avoids repeating `System.out.println(...)` in every resource class/method.
+- **Maintainability:** log behaviour can be changed in one place (e.g., add headers, correlation ids, or switch to a logger) without touching every endpoint.
+
+In short, filters centralize a shared concern and keep resource classes focused on request handling/business logic.
+
 ## Sample curl commands
 
 > Note: Update host/port depending on how you deploy the WAR.
