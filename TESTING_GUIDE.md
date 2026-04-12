@@ -131,12 +131,62 @@ Errors are returned as JSON similar to:
     - Expect: `200 OK`
     - Confirm only Temperature sensors returned.
 
-12. **POST** `/api/v1/sensors` with non-existent roomId
+12. **GET** `/api/v1/sensors/TEMP-001`
+    - Expect: `200 OK`
+    - Confirm returned `id` is `TEMP-001`.
+
+13. **PUT** `/api/v1/sensors/TEMP-001` (full replace)
+    - Body example:
+      ```json
+      {
+        "id": "TEMP-001",
+        "type": "Temperature",
+        "status": "MAINTENANCE",
+        "currentValue": 99.9,
+        "roomId": "LIB-301"
+      }
+      ```
+    - Expect: `200 OK`
+    - Confirm new `status`/`currentValue` persisted (check with GET by id).
+
+14. **PUT** `/api/v1/sensors/TEMP-001` with attempt to change ID (ID immortality)
+    - Body example:
+      ```json
+      {
+        "id": "TEMP-999",
+        "type": "Temperature",
+        "status": "ACTIVE",
+        "currentValue": 0,
+        "roomId": "LIB-301"
+      }
+      ```
+    - Expect: `400 Bad Request`
+
+15. **PUT** `/api/v1/sensors/TEMP-001` with non-existent roomId (semantic validation)
+    - Body example:
+      ```json
+      {
+        "id": "TEMP-001",
+        "type": "Temperature",
+        "status": "ACTIVE",
+        "currentValue": 0,
+        "roomId": "GHOST-ROOM"
+      }
+      ```
+    - Expect: `422 Unprocessable Entity`
+
+16. **POST** `/api/v1/sensors` with non-existent roomId
     - Example: `roomId":"NOPE"`
     - Expect: `422 Unprocessable Entity`
 
-13. **POST** `/api/v1/sensors` with duplicate id
+17. **POST** `/api/v1/sensors` with duplicate id
     - Expect: `409 Conflict`
+
+18. **DELETE** `/api/v1/sensors/TEMP-001`
+    - Expect: `204 No Content`
+
+19. **GET** `/api/v1/sensors/TEMP-001` after delete
+    - Expect: `404 Not Found`
 
 ### D. Readings (sub-resource)
 
