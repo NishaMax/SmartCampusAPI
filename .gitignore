@@ -53,3 +53,7 @@ nbactions.xml
 
 # Ignore empty or IDE-generated META-INF
 src/main/webapp/META-INF/
+
+# Project documentation
+DevelopmentPlan.md
+TESTING_GUIDE.md

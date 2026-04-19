@@ -1,18 +1,73 @@
+# Smart Campus API — Overview and Quick Start
+
+## Overview of the API design
+
+- Base path: /api/v1 (set by @ApplicationPath in the JAX-RS application).
+- Resources:
+  - Rooms: /rooms — CRUD for Room objects (id, name, capacity).
+  - Sensors: /sensors — CRUD for Sensor objects (id, type, status, currentValue, roomId). Sensor id is immutable.
+  - Readings: /sensors/{sensorId}/readings — Sub-resource for SensorReading objects (id, timestamp, value). POST updates sensor.currentValue.
+- Storage: in-memory DataStore (resets on server restart).
+- Error handling: 400 Bad Request, 404 Not Found, 409 Conflict, 422 Unprocessable Entity, 403 Forbidden for business rules.
+
+## Build and launch (exact steps)
+
+Prerequisites: Java 11+ and Maven installed. Default host: http://localhost:8080
+
+A) Run with embedded Jetty
+
+1. Open PowerShell in the project folder.
+2. Build: mvn clean package
+3. Run Jetty: mvn jetty:run
+4. Open: http://localhost:8080/api/v1
+
+B) Deploy to external Tomcat
+
+1. Build: mvn clean package
+2. Copy target/ROOT.war to %TOMCAT_HOME%\webapps\ROOT.war
+3. Start/restart Tomcat.
+4. Open: http://localhost:8080/api/v1
+
+C) NetBeans built-in Tomcat
+
+1. Open the Maven project in NetBeans.
+2. Ensure project finalName is ROOT or set Context Path to `/` in Project > Properties > Run.
+3. Clean & Build or Deploy from NetBeans, then Start the server.
+4. Open: http://localhost:8080/api/v1
+
+## Quick curl examples (PowerShell-friendly)
+
+1. Create a room (201 Created)
+   curl -i -X POST http://localhost:8080/api/v1/rooms -H "Content-Type: application/json" -d '{"id":"LIB-301","name":"Library Quiet Study","capacity":40}'
+
+2. Create a sensor linked to the room (201 Created)
+   curl -i -X POST http://localhost:8080/api/v1/sensors -H "Content-Type: application/json" -d '{"id":"TEMP-001","type":"Temperature","status":"ACTIVE","currentValue":0,"roomId":"LIB-301"}'
+
+3. List sensors (200 OK)
+   curl -i http://localhost:8080/api/v1/sensors
+
+4. Add a reading to a sensor (201 Created)
+   curl -i -X POST http://localhost:8080/api/v1/sensors/TEMP-001/readings -H "Content-Type: application/json" -d '{"id":"R-001","timestamp":1710000000000,"value":23.5}'
+
+5. Delete a sensor (204 No Content)
+   curl -i -X DELETE http://localhost:8080/api/v1/sensors/TEMP-001
+
 # Smart Campus API (5COSC022W Coursework)
+
 Part 1 – Report Answers
 
 ### Q1) Default lifecycle of a JAX-RS Resource class
 
 1. The Default Lifecycle: Per-Request
-In JAX-RS, the default behavior is Request-Scoped.
+   In JAX-RS, the default behavior is Request-Scoped.
 
 This means that every time a user sends a request to an endpoint, the server creates a brand-new instance of the Resource class. Once the server sends the JSON response back, that instance is destroyed. It is not a singleton by default.
 
 2. Impact on Data Management
-Because a new class instance is created for every request, we cannot store our lists of rooms or sensors as regular variables inside the Resource class. If we did, the list would be empty every time a new request arrived! To prevent this data loss, we have to store the data in a Shared Service or a Singleton class. This ensures that only one copy of the data exists in the server's memory, regardless of how many request objects are being created and destroyed.
+   Because a new class instance is created for every request, we cannot store our lists of rooms or sensors as regular variables inside the Resource class. If we did, the list would be empty every time a new request arrived! To prevent this data loss, we have to store the data in a Shared Service or a Singleton class. This ensures that only one copy of the data exists in the server's memory, regardless of how many request objects are being created and destroyed.
 
 3. Synchronization and Race Conditions
-Since the API is running on Tomcat, it is multi-threaded. This means multiple users could try to add or delete rooms at the exact same millisecond.
+   Since the API is running on Tomcat, it is multi-threaded. This means multiple users could try to add or delete rooms at the exact same millisecond.
 
 The Risk: If two requests try to modify a standard ArrayList at the same time, it can lead to a "Race Condition" where data gets corrupted or the server crashes.
 
@@ -120,44 +175,3 @@ Using a `ContainerRequestFilter` / `ContainerResponseFilter` is preferable becau
 
 In short, filters centralize a shared concern and keep resource classes focused on request handling/business logic.
 
-## Sample curl commands
-
-> Note: Update host/port depending on how you deploy the WAR.
-
-```bash
-# Discovery
-curl -i http://localhost:8080/api/v1
-
-# List rooms
-curl -i http://localhost:8080/api/v1/rooms
-
-# Create a room
-curl -i -X POST http://localhost:8080/api/v1/rooms \
-  -H "Content-Type: application/json" \
-  -d "{\"id\":\"LIB-301\",\"name\":\"Library Quiet Study\",\"capacity\":40}"
-
-# Get a room by id
-curl -i http://localhost:8080/api/v1/rooms/LIB-301
-
-# Delete a room
-curl -i -X DELETE http://localhost:8080/api/v1/rooms/LIB-301
-
-# Create a sensor (assumes room LIB-301 exists)
-curl -i -X POST http://localhost:8080/api/v1/sensors \
-  -H "Content-Type: application/json" \
-  -d "{\"id\":\"TEMP-001\",\"type\":\"Temperature\",\"status\":\"ACTIVE\",\"currentValue\":0,\"roomId\":\"LIB-301\"}"
-
-# List sensors
-curl -i http://localhost:8080/api/v1/sensors
-
-# Filter sensors by type
-curl -i "http://localhost:8080/api/v1/sensors?type=Temperature"
-
-# Add a reading to a sensor
-curl -i -X POST http://localhost:8080/api/v1/sensors/TEMP-001/readings \
-  -H "Content-Type: application/json" \
-  -d "{\"id\":\"R-001\",\"timestamp\":1710000000000,\"value\":23.5}"
-
-# Get reading history
-curl -i http://localhost:8080/api/v1/sensors/TEMP-001/readings
-```
