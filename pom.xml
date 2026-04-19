@@ -57,7 +57,7 @@
     </dependencies>
 
     <build>
-        <finalName>smart-campus-api</finalName>
+        <finalName>ROOT</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -75,7 +75,7 @@
                 <version>9.4.44.v20210927</version>
                 <configuration>
                     <webApp>
-                        <contextPath>/smart-campus-api</contextPath>
+                        <contextPath>/</contextPath>
                     </webApp>
                 </configuration>
             </plugin>
