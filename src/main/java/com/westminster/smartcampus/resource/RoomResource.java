@@ -79,7 +79,7 @@ public class RoomResource {
 
         // Constraint: a room cannot be deleted if it still has sensors assigned.
         if (room.getSensorIds() != null && !room.getSensorIds().isEmpty()) {
-            throw new ConflictException("Room cannot be deleted while sensors are assigned");
+            throw new com.westminster.smartcampus.exception.RoomNotEmptyException("Room cannot be deleted while sensors are assigned");
         }
 
         dataStore.deleteRoom(id);

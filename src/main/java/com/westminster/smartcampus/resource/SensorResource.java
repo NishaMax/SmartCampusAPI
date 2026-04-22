@@ -3,7 +3,7 @@ package com.westminster.smartcampus.resource;
 import com.westminster.smartcampus.exception.BadRequestException;
 import com.westminster.smartcampus.exception.ConflictException;
 import com.westminster.smartcampus.exception.NotFoundException;
-import com.westminster.smartcampus.exception.UnprocessableEntityException;
+import com.westminster.smartcampus.exception.LinkedResourceNotFoundException;
 import com.westminster.smartcampus.model.Room;
 import com.westminster.smartcampus.model.Sensor;
 import com.westminster.smartcampus.store.DataStore;
@@ -69,7 +69,7 @@ public class SensorResource {
 
         Room room = dataStore.getRoom(sensor.getRoomId());
         if (room == null) {
-            throw new UnprocessableEntityException("Referenced roomId does not exist");
+            throw new LinkedResourceNotFoundException("Referenced roomId does not exist");
         }
 
         boolean alreadyExists = dataStore.getSensor(sensor.getId()) != null;
@@ -124,7 +124,7 @@ public class SensorResource {
         // Semantic validation (422): new roomId must exist.
         Room newRoom = dataStore.getRoom(updated.getRoomId());
         if (newRoom == null) {
-            throw new UnprocessableEntityException("Referenced roomId does not exist");
+            throw new LinkedResourceNotFoundException("Referenced roomId does not exist");
         }
 
         // Unlink from old room (if changed)

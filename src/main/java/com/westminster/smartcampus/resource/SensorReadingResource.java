@@ -63,7 +63,7 @@ public class SensorReadingResource {
 
         // "Security" rule for coursework: OFFLINE sensors reject new readings.
         if (sensor.getStatus() != null && sensor.getStatus().equalsIgnoreCase("OFFLINE")) {
-            throw new SensorUnavailableException("Sensor is OFFLINE and cannot accept readings");
+            throw new com.westminster.smartcampus.exception.SensorUnavailableException("Sensor is OFFLINE and cannot accept readings");
         }
 
         if (reading == null || reading.getId() == null || reading.getId().trim().isEmpty()) {
