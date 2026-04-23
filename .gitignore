@@ -48,8 +48,7 @@ target/
 Thumbs.db
 
 # NetBeans
-nb-configuration.xml
-nbactions.xml
+
 
 # Ignore empty or IDE-generated META-INF
 src/main/webapp/META-INF/
